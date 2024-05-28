@@ -41,6 +41,3 @@ module "vpc" {
   # Instances launched into the Public subnet should be assigned a public IP address.
   map_public_ip_on_launch = true
 }
-
-
-# terraform init -backend-config="access_key=AKIAWCBIPYVG4QADOK22" -backend-config="secret_key=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"
