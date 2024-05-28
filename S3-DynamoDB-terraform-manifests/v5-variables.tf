@@ -3,7 +3,6 @@
 variable "aws_region" {
   description = "Region in which AWS Resources to be created"
   type        = string
-  default     = "us-east-1"
 }
 
 variable "aws_access_key" {
@@ -18,26 +17,22 @@ variable "aws_secret_key" {
   default     = ""
 }
 # S3 Bucket Name
-variable "s3-bucket" {
+variable "s3_bucket" {
   description = "Name of S3 Bucket"
   type        = string
-  default     = "terraform-eks-s3-bucket"
 }
 # DynamoDB Variable
-variable "dynamodb-table" {
+variable "dynamodb_table" {
   description = "Name of dynamoDB table"
   type        = string
-  default     = "eks-dynamodb-lock-table"
 }
 # Business Division
-variable "business_divsion" {
-  description = "Business Division in the large organization this Infrastructure belongs"
+variable "project" {
+  description = "Project Name"
   type        = string
-  default     = "franciscan"
 }
 # AWS Key Pair
-variable "aws-key-pair" {
+variable "aws_key_pair" {
   description = "AWS Key Pair name"
   type        = string
-  default     = "eks-terraform-key"
 }
