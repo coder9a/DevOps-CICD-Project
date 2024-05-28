@@ -2,7 +2,7 @@ resource "aws_s3_bucket" "s3-bucket-name" {
   bucket = var.s3_bucket
   tags = {
     Name        = "${var.project}"
-    Environment = "prod"
+    env = "prod"
   }
 }
 
@@ -39,6 +39,6 @@ resource "aws_dynamodb_table" "dynamodb-lock-table" {
 
   tags = {
     Name        = "${var.project}-dynamodb-table"
-    Environment = "dev"
+    env = "dev"
   }
 }

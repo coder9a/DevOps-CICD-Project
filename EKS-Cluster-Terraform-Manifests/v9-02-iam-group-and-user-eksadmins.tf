@@ -1,12 +1,12 @@
 # Resource: AWS IAM Group 
 resource "aws_iam_group" "eksadmins_iam_group" {
-  name = "${local.name}-eksadmins"
+  name = "${var.project}-eksadmins"
   path = "/"
 }
 
 # Resource: AWS IAM Group Policy
 resource "aws_iam_group_policy" "eksadmins_iam_group_assumerole_policy" {
-  name  = "${local.name}-eksadmins-group-policy"
+  name  = "${var.project}-eksadmins-group-policy"
   group = aws_iam_group.eksadmins_iam_group.name
 
   # Terraform's "jsonencode" function converts a
@@ -29,7 +29,7 @@ resource "aws_iam_group_policy" "eksadmins_iam_group_assumerole_policy" {
 
 # Resource: AWS IAM User - Basic User 
 resource "aws_iam_user" "eksadmin_user" {
-  name          = "${local.name}-eksadmin3"
+  name          = "${var.project}-eksadmin3"
   path          = "/"
   force_destroy = true
   tags          = local.common_tags
@@ -37,7 +37,7 @@ resource "aws_iam_user" "eksadmin_user" {
 
 # Resource: AWS IAM Group Membership
 resource "aws_iam_group_membership" "eksadmins" {
-  name = "${local.name}-eksadmins-group-membership"
+  name = "${var.project}-eksadmins-group-membership"
   users = [
     aws_iam_user.eksadmin_user.name
   ]
