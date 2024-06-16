@@ -16,15 +16,15 @@ pipeline
     }
 
      parameters {
-        string(name: 'aws_region', defaultValue: 'us-east-1', description: 'AWS region where all the resources will be created',)
-        string(name: 'project', defaultValue: 'test', description: 'Name of terraform project',)
-        string(name: 'env', defaultValue: 'dev', description: 'Project env',)
-        // string(name: 'vpc_name', defaultValue: 'dev-vpc', description: '',)
-        string(name: 'vpc_cidr_block', defaultValue: '10.0.0.0/16', description: '',)
-        string(name: 'vpc_availability_zones', defaultValue: 'us-east-1a,us-east-1b', description: '',)
-        string(name: 'vpc_public_subnets', defaultValue: '10.0.101.0/24,10.0.102.0/24', description: '',)
-        string(name: 'vpc_private_subnets', defaultValue: '10.0.1.0/24,10.0.2.0/24', description: '',)
-        string(name: 'aws_key_pair', defaultValue: 'eks-terraform-key', description: 'AWS Key pair',)
+        string(name: 'aws_region', defaultValue: 'us-east-1', description: 'AWS region where all the resources will be created')
+        string(name: 'project', defaultValue: 'test', description: 'Name of terraform project')
+        string(name: 'env', defaultValue: 'dev', description: 'Project env')
+        // string(name: 'vpc_name', defaultValue: 'dev-vpc', description: '')
+        string(name: 'vpc_cidr_block', defaultValue: '10.0.0.0/16', description: 'VPC CIDR block')
+        string(name: 'vpc_availability_zones', defaultValue: 'us-east-1a,us-east-1b', description: 'Comma-separated list of availability zones')
+        string(name: 'vpc_public_subnets', defaultValue: '10.0.101.0/24,10.0.102.0/24', description: 'Comma-separated list of public subnets CIDR blocks')
+        string(name: 'vpc_private_subnets', defaultValue: '10.0.1.0/24,10.0.2.0/24', description: 'Comma-separated list of private subnets CIDR blocks')
+        string(name: 'aws_key_pair', defaultValue: 'eks-terraform-key', description: 'AWS Key pair')
         choice(name: 'action', description: '', choices: ['plan','apply' , 'destroy'])
     }
     stages {
