@@ -2,6 +2,6 @@
 locals {
   common_tags = {
     owners = var.project
-    env    = var.env
+    environment    = var.environment
   }
 }

@@ -12,7 +12,7 @@ variable "aws_secret_key" {
   description = "secret key of AWS account"
 }
 
-variable "env" {
+variable "environment" {
   description = "Environment Variable used as a prefix"
   type        = string
 }
