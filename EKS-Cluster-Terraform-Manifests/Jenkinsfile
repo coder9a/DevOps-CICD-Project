@@ -8,7 +8,7 @@ pipeline
         TF_VAR_project="${project}"
         TF_VAR_env="${env}"
         TF_VAR_aws_key_pair="${aws_key_pair}"
-        TF_VAR_vpc_name="${vpc_name}"
+        // TF_VAR_vpc_name="${vpc_name}"
         TF_VAR_vpc_cidr_block="${vpc_cidr_block}"
         TF_VAR_vpc_availability_zones="${vpc_availability_zones}"
         TF_VAR_vpc_public_subnets="${vpc_public_subnets}"
@@ -19,7 +19,7 @@ pipeline
         string(name: 'aws_region', defaultValue: 'us-east-1', description: 'AWS region where all the resources will be created',)
         string(name: 'project', defaultValue: 'test', description: 'Name of terraform project',)
         string(name: 'env', defaultValue: 'dev', description: 'Project env',)
-        string(name: 'vpc_name', defaultValue: 'dev-vpc', description: '',)
+        // string(name: 'vpc_name', defaultValue: 'dev-vpc', description: '',)
         string(name: 'vpc_cidr_block', defaultValue: '10.0.0.0/16', description: '',)
         string(name: 'vpc_availability_zones', defaultValue: 'us-east-1a,us-east-1b', description: '',)
         string(name: 'vpc_public_subnets', defaultValue: '10.0.101.0/24,10.0.102.0/24', description: '',)
