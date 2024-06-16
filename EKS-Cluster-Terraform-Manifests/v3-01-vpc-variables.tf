@@ -1,11 +1,5 @@
 # VPC Input Variables
 
-# VPC Name
-variable "vpc_name" {
-  description = "VPC Name"
-  type        = string
-}
-
 # VPC CIDR Block
 variable "vpc_cidr_block" {
   description = "VPC CIDR Block"
