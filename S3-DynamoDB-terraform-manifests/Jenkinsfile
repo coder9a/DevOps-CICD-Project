@@ -37,7 +37,7 @@ pipeline
                  '''
             }
         }
-        stage("Terraform Action"){
+        stage("Deploying Infra"){
             steps{
                 sh '''
                 cd S3-DynamoDB-terraform-manifests/

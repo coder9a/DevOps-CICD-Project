@@ -43,7 +43,7 @@ pipeline
                  '''
             }
         }
-        stage("Terraform Action"){
+        stage("Deploying EKS Cluster"){
             steps{
                 sh '''
                 cd EKS-Cluster-Terraform-Manifests/
