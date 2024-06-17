@@ -1,8 +1,9 @@
 resource "aws_s3_bucket" "s3-bucket-name" {
-  bucket = var.s3_bucket
+  bucket        = var.s3_bucket
+  force_destroy = true
   tags = {
-    Name        = "${var.project}"
-    env = "prod"
+    Name = "${var.project}"
+    env  = "prod"
   }
 }
 
@@ -38,7 +39,7 @@ resource "aws_dynamodb_table" "dynamodb-lock-table" {
   }
 
   tags = {
-    Name        = "${var.project}-dynamodb-table"
-    env = "dev"
+    Name = "${var.project}-dynamodb-table"
+    env  = "dev"
   }
 }
