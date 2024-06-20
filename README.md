@@ -29,7 +29,7 @@
 - Clone your application's code repository onto the EC2 instance:
     
     ```bash
-    git clone https://github.com/N4si/DevSecOps-Project.git
+    git clone -b Jenkins-CICD-v1 https://github.com/coder9a/DevOps-CICD-Project.git
     ```
     
 
@@ -196,7 +196,7 @@ pipeline {
         }
         stage('Checkout from Git') {
             steps {
-                git branch: 'main', url: 'https://github.com/N4si/DevSecOps-Project.git'
+                git branch: 'Jenkins-CICD-v1', url: 'https://github.com/coder9a/DevOps-CICD-Project.git'
             }
         }
         stage("Sonarqube Analysis") {
@@ -286,7 +286,7 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git branch: 'main', url: 'https://github.com/N4si/DevSecOps-Project.git'
+                git branch: 'Jenkins-CICD-v1', url: 'https://github.com/coder9a/DevOps-CICD-Project.git'
             }
         }
         stage("Sonarqube Analysis "){
@@ -325,20 +325,20 @@ pipeline{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
                        sh "docker build --build-arg TMDB_V3_API_KEY=<yourapikey> -t netflix ."
-                       sh "docker tag netflix nasi101/netflix:latest "
-                       sh "docker push nasi101/netflix:latest "
+                       sh "docker tag netflix coder9a/netflix:latest "
+                       sh "docker push coder9a/netflix:latest "
                     }
                 }
             }
         }
         stage("TRIVY"){
             steps{
-                sh "trivy image nasi101/netflix:latest > trivyimage.txt" 
+                sh "trivy image coder9a/netflix:latest > trivyimage.txt" 
             }
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name netflix -p 8081:80 nasi101/netflix:latest'
+                sh 'docker run -d --name netflix -p 8081:80 coder9a/netflix:latest'
             }
         }
     }
@@ -679,6 +679,8 @@ That's it! You've successfully installed and set up Grafana to work with Prometh
 ## Create Kubernetes Cluster with Nodegroups
 
 In this phase, you'll set up a Kubernetes cluster with node groups. This will provide a scalable environment to deploy and manage your applications.
+
+Checkout this README.md file in other branch for deploying eks cluster https://github.com/coder9a/DevOps-CICD-Project/blob/main/README.md
 
 ## Monitor Kubernetes with Prometheus
 
