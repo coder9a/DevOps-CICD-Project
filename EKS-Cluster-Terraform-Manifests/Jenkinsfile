@@ -2,63 +2,34 @@ pipeline
 {
     agent any
     environment {
+        TF_VAR_aws_region="${aws_region}"
         TF_VAR_aws_access_key = credentials('aws_access_key')
         TF_VAR_aws_secret_key = credentials('aws_secret_key')
-        TF_VAR_AWS_AMI="${AWS_AMI}"
-        TF_VAR_EC2_Instance_Type="${EC2_Instance_Type}"
         TF_VAR_project="${project}"
-        TF_VAR_AWS_Region="${AWS_Region}"
-        TF_VAR_VPC_CIDR="${VPC_CIDR}"
-        TF_VAR_Public_Subnet_CIDR="${Public_Subnet_CIDR}"
-        // TF_VAR_Private_Subnet_CIDR="${Private_Subnet_CIDR}"
-        TF_VAR_Public_Instance_Count="${Public_Instance_Count}"
-        // TF_VAR_Private_Instance_Count="${Private_Instance_Count}"
-        // TF_VAR_Public_Instance_Name="${Public_Instance_Name}"
-        // TF_VAR_Private_Instance_Name="${Private_Instance_Name}"
+        TF_VAR_environment="${environment}"
+        TF_VAR_aws_key_pair="${aws_key_pair}"
+        // TF_VAR_vpc_cidr_block="${vpc_cidr_block}"
+        // TF_VAR_vpc_availability_zones="${vpc_availability_zones}"
+        // TF_VAR_vpc_public_subnets="${vpc_public_subnets}"
+        // TF_VAR_vpc_private_subnets="${vpc_private_subnets}"
     }
 
      parameters {
-        string(name: 'AWS_AMI', defaultValue: 'ami-0557a15b87f6559cf', description: 'AMI setup',)
-        string(name: 'EC2_Instance_Type', defaultValue: 't2.micro', description: 'EC2 instance type',)
-        string(name: 'AWS_Region', defaultValue: 'us-east-1', description: 'AWS region where VPC will be present',)
-        string(name: 'VPC_CIDR', defaultValue: '10.0.0.0/16', description: 'AWS vpc cidr',)
-        string(name: 'Public_Subnet_CIDR', defaultValue: '10.0.1.0/24', description: 'AWS public subnet cidr',)
-        // string(name: 'Private_Subnet_CIDR', defaultValue: '10.0.2.0/24', description: 'AWS private subnet cidr',)
-        string(name: 'Public_Instance_Count', defaultValue: '1', description: 'Count of public instances to be deployed',)
-        // string(name: 'Private_Instance_Count', defaultValue: '1', description: 'Count of private instances to be deployed',)
-        string(name: 'project', defaultValue: 'test', description: 'Name of terraform project',)
+        string(name: 'aws_region', defaultValue: 'us-east-1', description: 'AWS region where all the resources will be created')
+        string(name: 'project', defaultValue: 'test', description: 'Name of terraform project')
+        string(name: 'environment', defaultValue: 'dev', description: 'Project environment')
+        // string(name: 'vpc_cidr_block', defaultValue: '10.0.0.0/16', description: 'VPC CIDR block')
+        // string(name: 'vpc_availability_zones', defaultValue: 'us-east-1a,us-east-1b', description: 'Comma-separated list of availability zones')
+        // string(name: 'vpc_public_subnets', defaultValue: '10.0.101.0/24,10.0.102.0/24', description: 'Comma-separated list of public subnets CIDR blocks')
+        // string(name: 'vpc_private_subnets', defaultValue: '10.0.1.0/24,10.0.2.0/24', description: 'Comma-separated list of private subnets CIDR blocks')
+        string(name: 'aws_key_pair', defaultValue: 'eks-terraform-key', description: 'AWS Key pair')
         choice(name: 'action', description: '', choices: ['plan','apply' , 'destroy'])
-        // extendedChoice( 
-        //     name: 'Public_Instance_Name', 
-        //     defaultValue: 'jenkins-master,build-server', 
-        //     description: 'Names of public instances', 
-        //     type: 'PT_CHECKBOX',
-        //     multiSelectDelimiter: ',',
-        //     value:'jenkins-master,build-server', 
-        //     visibleItemCount: 10
-        // )
-        // extendedChoice( 
-        //     name: 'Private_Instance_Name', 
-        //     defaultValue: 'ansible-server', 
-        //     description: 'Names of private instances', 
-        //     type: 'PT_CHECKBOX',
-        //     multiSelectDelimiter: ',',
-        //     value:'ansible-server-1,ansible-server-2', 
-        //     visibleItemCount: 10
-        // )
     }
     stages {
-        // stage("Jenkins setup"){
-        //     steps {
-        //         script {
-        //             currentBuild.displayName = "${EC2_Instance_Type}-${action}"
-        //             currentBuild.description = "Job for provising : ${EC2_Instance_Type}"
-        //         }
-        //     }
-        // }
         stage("Terraform Setup/init"){
             steps {
                 sh '''
+                cd EKS-Cluster-Terraform-Manifests/
                 terraform init -reconfigure -backend-config="access_key=$TF_VAR_aws_access_key" -backend-config="secret_key=$TF_VAR_aws_secret_key"
                 '''
             }
@@ -66,22 +37,16 @@ pipeline
         stage("Terraform dry-run"){
             steps{                  
                 sh '''
-                echo "AWS AMI --> "$TF_VAR_AWS_AMI
-                echo "AWS Instance Type --> "$TF_VAR_EC2_Instance_Type
+                cd EKS-Cluster-Terraform-Manifests/
                 echo "Project Name --> "$TF_VAR_project
-                echo "AWS Region --> "$TF_VAR_AWS_Region
-                echo "AWS VPC CIDR --> "$TF_VAR_VPC_CIDR
-                echo "Public Subnet CIDR --> "$TF_VAR_Public_Subnet_CIDR
-                echo "Instances in Public Subnet --> "$TF_VAR_Public_Instance_Count
                 terraform plan -var="aws_access_key=$TF_VAR_aws_access_key" -var="aws_secret_key=$TF_VAR_aws_secret_key"
                  '''
-                // echo "Instances in Private Subnet --> "$TF_VAR_Private_Instance_Count
-                // echo "Private Subnet CIDR --> "$TF_VAR_Private_Subnet_CIDR
             }
         }
-        stage("Terraform Action"){
+        stage("Deploying EKS Cluster"){
             steps{
                 sh '''
+                cd EKS-Cluster-Terraform-Manifests/
                 if [ $action = "plan" ]; then
                     terraform plan -var="aws_access_key=$TF_VAR_aws_access_key" -var="aws_secret_key=$TF_VAR_aws_secret_key"
                 else

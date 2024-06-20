@@ -1,8 +1,9 @@
 resource "aws_s3_bucket" "s3-bucket-name" {
-  bucket = var.s3-bucket
+  bucket        = var.s3_bucket
+  force_destroy = true
   tags = {
-    Name        = "${var.business_divsion}"
-    Environment = "prod"
+    Name = "${var.project}"
+    env  = "prod"
   }
 }
 
@@ -27,16 +28,8 @@ resource "aws_s3_bucket_versioning" "s3-bucket-versioning" {
   }
 }
 
-resource "aws_s3_object" "directory_structure" {
-  count        = length(local.s3_folders)
-  bucket       = aws_s3_bucket.s3-bucket-name.id
-  key          = local.s3_folders[count.index]
-  content_type = "application/x-directory"
-}
-
 resource "aws_dynamodb_table" "dynamodb-lock-table" {
-  count        = length(local.dynamodb_tables)
-  name         = local.dynamodb_tables[count.index]
+  name         = var.dynamodb_table
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
 
@@ -46,7 +39,7 @@ resource "aws_dynamodb_table" "dynamodb-lock-table" {
   }
 
   tags = {
-    Name        = "${var.business_divsion}-dynamodb-table"
-    Environment = "dev"
+    Name = "${var.project}-dynamodb-table"
+    env  = "dev"
   }
 }
